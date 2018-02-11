@@ -1,0 +1,72 @@
+
+CREATE TABLE IF NOT EXISTS  application (
+camper_id integer PRIMARY KEY,
+name_first text,
+name_last text,
+address text,
+email text,
+camp_dates text)
+
+CREATE TABLE IF NOT EXISTS emergency_contact (
+camper_id integer PRIMARY KEY,
+name_first text,
+name_last text,
+emergency_contact text)
+
+CREATE TABLE IF NOT EXISTS legal (
+camper_id integer PRIMARY KEY,
+name_first text,
+name_last text,
+age integer,
+gender text,
+parent text)
+
+CREATE TABLE IF NOT EXISTS medical (
+camper_id integer PRIMARY KEY,
+name_first text,
+name_last text,
+medical_insturance text,
+doctor text,
+dentist text,
+allergies text,
+medications text)
+
+CREATE TABLE IF NOT EXISTS notification (
+camper_id integer PRIMARY KEY,
+name_first text,
+camp_dates text,
+director_decision text,
+director_comments text,
+director_rank integer,
+category text,
+letter_type text,
+notification_sent_date text)
+
+--form's, equiptment, and clothes are boolean 1,0's indicating if camper brought it or not
+CREATE TABLE IF NOT EXISTS check_in (
+camper_id integer PRIMARY KEY,
+check_in_date text,
+application_form integer,
+emergency_contact_form integer,
+legal_form integer,
+medical_form integer,
+equiptment integer,
+clothes integer)
+
+
+CREATE TABLE IF NOT EXISTS dorm (
+camper_id integer PRIMARY KEY,
+camp_date text,
+dorm_number integer,
+category text,
+gender text,
+age integer)
+
+CREATE TABLE IF NOT EXISTS band(
+camper_id integer PRIMARY KEY,
+camp_date text,
+band text,
+category text,
+gender text,
+director_rank integer,
+request text)
