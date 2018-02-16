@@ -4,6 +4,8 @@ camper_id integer PRIMARY KEY,
 name_first text,
 name_last text,
 address text,
+roomate_pref,
+band_pref,
 email text,
 camp_dates text)
 
