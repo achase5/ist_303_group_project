@@ -1,25 +1,24 @@
 from pyfiglet import figlet_format
 from sd_dorm_assign import *
+from sqlite_dbv3 import *
+import getpass 
+import os 
 
 def main():
 
 	print()
-	
 	print(figlet_format('Future Rock Stars!', font='starwars'))
 	
 	print('##################################################################\n')
 
 	print("WELECOME TO THE REGISTRATION NETWORK\n")
 	print(" (1) Enter 'q' to Quit")
-	print(" (2) Enter 'c' to Check In a Camper")
-	print(" (3) Enter 'm' to Mail Application Decision Notification")
-	print(" (4) Enter 'a' to Handle Applications")
-	print(" (5) Enter 'x' to go into Maintence Mode")
+	print(" (2) Enter 'c' to Check-In a Camper")
+	print(" (3) Enter 'm' to Make Application Decision, Mail Application Decision, or Update Camper Info")
+	print(" (4) Enter 'a' to Enter a New Application, or View Existing Camper Applicant Info")
+	print(" (5) Enter 'x' to Go Into Maintence Mode")
 	
-
 	print('##################################################################\n')
-
-	
 	print()
 
 
@@ -30,35 +29,87 @@ def handle_applications():
 		print('\n')
 		print('##################################################################\n')
 		print ("******* WELCOME TO THE CAMPER APPLICATION PAGE ********\n")
-		print(" (1) Type 'Back' to return to main menu\n")
-		print(" (2) Type 'New' to Enter a new Application into the Database \n")
+		print(" (1) Type 'Back' to return to main menu")
+		print(" (2) Type 'New' to Enter a new Application into the Database")
+		print(" (3) Type 'Look' to View the Status & Info of an Applicant")
 		print('\n')
 
 		print('##################################################################\n')	
 
-
 		user_in = input("Enter Command : ")
 		print('\n')
-
 
 		if (user_in == 'back' or user_in == 'Back' or user_in == 'BACK'):
 			loop = 0
 
-
 		if (user_in == 'new' or user_in == 'New' or user_in == 'NEW'):
-			print('\n')
-			app_first_name = input(" (1) Enter Camper's First Name: ")
-			app_last_name = input(" (2) Enter Camper's Last Name: ")
-			app_address = input(" (3) Enter Camper's Address: ")
-			app_age = input(" (4) Enter Camper's Age: ")
-			print("\n*** Possible Band Roles: 'Singer', 'Guitarist', 'Drummer', 'Bassist', 'Keyboardist' and 'Instrumentalist' *** ")
-			app_band_role = input(" (5) Enter Camper's Intended Band Role: ")
-			app_email = input(" (6) Enter Camper's Email Address: ")
-			app_camp_date = input(" (7) Enter Camper's Intended Camp Dates: ")
-			app_roomate_pref = input(" (8) (Optional) Enter Camper's Roomate Preference (as an ID): ")
-			app_band_pref = input(" (9) (Optional) Enter Camper's Band Preference: ")
 
-			#TODO INSERT all that data into the 'application' table in our DB
+			print('\n')
+			app_id = input(" (1) Enter Camper's ID: ")
+			app_first_name = input(" (2) Enter Camper's First Name: ")
+			app_last_name = input(" (3) Enter Camper's Last Name: ")
+			app_address = input(" (4) Enter Camper's Address: ")
+			app_age = input(" (5) Enter Camper's Age: ")
+			print("\n*** Possible Band Roles: 'Singer', 'Guitarist', 'Drummer', 'Bassist', 'Keyboardist' and 'Instrumentalist' *** ")
+			app_band_role = input(" (6) Enter Camper's Intended Band Role: ")
+			app_email = input(" (7) Enter Camper's Email Address: ")
+			app_camp_date = input(" (8) Enter Camper's Intended Camp Dates: ")
+			app_roomate_pref = input(" (9) (Optional) Enter Camper's Roomate Preference (as an ID): ")
+			print("\n*** Possible Bands: 'Band1', 'Band2', 'Band3', 'Band4', 'Band5', 'Band6', 'Band7' and 'Band8' *** ")
+			app_band_pref = input(" (10) (Optional) Enter Camper's Band Preference: ")
+
+			#SQL INSERT statement 
+
+			c, conn = create_db()
+
+			t = (app_id, app_first_name, app_last_name, app_address, app_age, app_band_role, app_roomate_pref, app_band_pref, app_email, app_camp_date, 'TBD')
+			c.execute("INSERT INTO application VALUES (?,?,?,?,?,?,?,?,?,?,?)", t)
+			
+			save_db_changes(conn)
+
+
+		if (user_in == 'look' or user_in == 'Look' or user_in == 'LOOK'):
+
+			print('\n')
+			app_id = input(" (1) Enter Camper's ID to Search: ")
+
+			#SQL SELECT statement 
+			c, conn = create_db()
+			 
+			c.execute("SELECT * FROM application WHERE camper_id = '"+ app_id + "'")
+			r = c.fetchone()
+
+			if (r):
+				print("\n")
+				print(" - Camper ID : ", r[0])
+				print("\n")
+				print(" - Camper Name : ", r[1] + " " + r[2])
+				print(" - Camper Address : ", r[3])
+				print(" - Camper Age : ", r[4])
+				print(" - Camper's Proposed Band Role : ", r[5])
+				print(" - Camper Roomate Preference : ", r[6])
+				print(" - Camper Band Preference : ", r[7])
+				print(" - Camper Email : ", r[8])
+				print(" - Camper's Proposed Camp Start Date : ", r[9])
+
+				print("\n")
+				if r[10] == "R":
+					print(" - Camper Application Status : REJECTED")
+				elif r[10] == "A":
+					print(" - Camper Application Status : ACCEPTED")
+				else:
+					print(" - Camper Application Status : " + r[10])
+
+			else:
+				print("\n")
+				print("ERROR: CAMPER ID: "+ app_id+" IS NOT IN THE DATABASE.")
+			
+			
+			save_db_changes(conn)
+				
+
+
+
 
 
 			
@@ -70,8 +121,9 @@ def make_decision():
 		print('\n')
 		print('##################################################################\n')
 		print ("******* WELCOME TO THE CAMPER APPLICATION UPDATE PAGE ********\n")
-		print(" (1) Type 'Back' to Return to the Main Menu\n")
-		print(" (2) Type 'Mail' to Email Decision to Camper \n")
+		print(" (1) Type 'Back' to Return to the Main Menu")
+		print(" (2) Type 'Mail' to Make & Email Decision to Camper")
+		print ("(3) Type 'u' to Update Camper Applicant Info")
 		print('\n')
 
 		print('##################################################################\n')	
@@ -222,6 +274,41 @@ def check_in_camper():
 
 
 
+def maintenance_mode():
+	pswd = getpass.getpass('Enter Password :')
+	if (pswd == "campers123"):
+		loop = 1
+		while (loop):
+			print('\n')
+			print('##################################################################\n')
+			print ("******* WELCOME TO MAINTENANCE MODE ********\n")
+			print(" (1) Type 'Back' to return to main menu")
+			print(" (2) Type 'D' to Clear All Current Data From Database")
+			print('##################################################################\n')
+			print('\n')
+			print('\n')
+			user_in = input("Enter Command : ")
+			print('\n')
+
+			if (user_in == 'back' or user_in == 'Back' or user_in == 'BACK'):
+				loop = 0
+
+			if (user_in == "D" or user_in == "d"):
+				remov = input("Are you sure you want to remove this database? (y or n): ")
+				if (remov == "y" or remov == "Y"):
+					
+					try:
+						os.remove("example.db")
+
+					except FileNotFoundError:
+						print("\n")
+						print("*** ERROR: Database has already been cleared. ***")
+	else:
+		print('##################################################################\n')
+		print("MAINTENANCE MODE: ACCESS DENIED \n")
+		print('##################################################################')
+
+
 
 
 
@@ -229,6 +316,9 @@ def check_in_camper():
 
 
 def display_menu():
+	#c = connect_to_db()
+
+
 	loop = 1
 	while(loop):
 		main()
@@ -244,6 +334,9 @@ def display_menu():
 
 		elif (user_in == 'm'):
 			make_decision()
+
+		elif(user_in == 'x'):
+			maintenance_mode()
 			
 
 
