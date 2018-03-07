@@ -13,17 +13,19 @@ sql_create_application_table = """ CREATE TABLE IF NOT EXISTS  application (
                                     name_first text,
                                     name_last text,
                                     address text,
+                                    gender text,
                                     age integer,
                                     band_role text, 
                                     roomate_pref integer,
                                     band_pref text,
                                     email text,
                                     camp_dates text,
-                                    status text)
+                                    status text,
+                                    payment text)
                                     ; """
  
 sql_create_emergency_contact_table = """CREATE TABLE IF NOT EXISTS emergency_contact (
-                            camper_id integer PRIMARY KEY,
+                            camper_id text PRIMARY KEY,
                             name_first text,
                             name_last text,
                             emergency_contact text)
@@ -31,18 +33,15 @@ sql_create_emergency_contact_table = """CREATE TABLE IF NOT EXISTS emergency_con
 
 
 sql_create_legal_table = """CREATE TABLE IF NOT EXISTS legal (
-                                    camper_id integer PRIMARY KEY,
+                                    camper_id text PRIMARY KEY,
                                     name_first text,
                                     name_last text,
                                     age integer,
-                                    gender text,
                                     parent text);"""
                                     
 
 sql_create_medical_table = """CREATE TABLE IF NOT EXISTS medical (
-                                    camper_id integer PRIMARY KEY,
-                                    name_first text,
-                                    name_last text,
+                                    camper_id text PRIMARY KEY,
                                     medical_insturance text,
                                     doctor text,
                                     dentist text,
@@ -50,7 +49,7 @@ sql_create_medical_table = """CREATE TABLE IF NOT EXISTS medical (
                                     medications text);"""
 
 sql_create_notification_table = """CREATE TABLE IF NOT EXISTS notification (
-                                        camper_id integer PRIMARY KEY,
+                                        camper_id text PRIMARY KEY,
                                         name_first text,
                                         camp_dates text,
                                         director_decision text,
@@ -60,10 +59,10 @@ sql_create_notification_table = """CREATE TABLE IF NOT EXISTS notification (
                                         letter_type text,
                                         notification_sent_date text);"""
 
-sql_create_check_in_table = """--form's, equiptment, and clothes are boolean 1,0's indicating if camper brought it or not
-                                    CREATE TABLE IF NOT EXISTS check_in (
-                                    camper_id integer PRIMARY KEY,
+sql_create_check_in_table = """CREATE TABLE IF NOT EXISTS check_in (
+                                    camper_id text PRIMARY KEY,
                                     check_in_date text,
+                                    has_checked_in integer,
                                     application_form integer,
                                     emergency_contact_form integer,
                                     legal_form integer,
@@ -73,7 +72,7 @@ sql_create_check_in_table = """--form's, equiptment, and clothes are boolean 1,0
                                     ;"""  
 
 sql_create_dorm_table = """CREATE TABLE IF NOT EXISTS dorm (
-                                camper_id integer PRIMARY KEY,
+                                camper_id text PRIMARY KEY,
                                 camp_date text,
                                 dorm_number integer,
                                 category text,
@@ -81,7 +80,7 @@ sql_create_dorm_table = """CREATE TABLE IF NOT EXISTS dorm (
                                 age integer);"""  
 
 sql_create_band_table = """CREATE TABLE IF NOT EXISTS band(
-                                camper_id integer PRIMARY KEY,
+                                camper_id text PRIMARY KEY,
                                 camp_date text,
                                 band text,
                                 category text,
@@ -103,8 +102,14 @@ def connect_to_db():
 
 
 def create_tables(c):
-
 	c.execute(sql_create_application_table)
+	c.execute(sql_create_emergency_contact_table)
+	c.execute(sql_create_legal_table)
+	c.execute(sql_create_medical_table)
+	c.execute(sql_create_notification_table)
+	c.execute(sql_create_check_in_table)
+	c.execute(sql_create_dorm_table)
+	c.execute(sql_create_band_table)
 
 
 def create_db():
@@ -125,27 +130,5 @@ def save_db_changes(conn):
 
 
 
-"""
-# Create table
-c.execute('''CREATE TABLE stocks
-             (date text, trans text, symbol text, qty real, price real)''')
 
-# Insert a row of data
-c.execute("INSERT INTO stocks VALUES ('2006-01-05','BUY','RHAT',100,35.14)")
-
-
-
-for row in c.execute('SELECT * FROM stocks ORDER BY price'):
-        print(row)
-        print(row[0])
-
-
-# Save (commit) the changes
-conn.commit()
-
-# We can also close the connection if we are done with it.
-# Just be sure any changes have been committed or they will be lost.
-conn.close()
-
-"""
 
