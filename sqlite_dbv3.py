@@ -90,17 +90,20 @@ sql_create_band_table = """CREATE TABLE IF NOT EXISTS band(
 
 
 
-
-
-
-
+"""
+Simple connection to SQLite database: exmaple.db
+"""
 def connect_to_db():
 	conn = sqlite3.connect('example.db')
 	c = conn.cursor()
 	return c, conn  
 
 
+"""
+Create tables listed above
 
+c : the database cursor object 
+"""
 def create_tables(c):
 	c.execute(sql_create_application_table)
 	c.execute(sql_create_emergency_contact_table)
@@ -112,6 +115,11 @@ def create_tables(c):
 	c.execute(sql_create_band_table)
 
 
+"""
+Connect to the Database if it exists. If not, then create the database and poplulate it
+with tables
+
+"""
 def create_db():
 	if os.path.exists("example.db"):
 		c, conn = connect_to_db()  
@@ -122,8 +130,11 @@ def create_db():
 	return c, conn 
 
 
+"""
+Save Database changes and close connection
 
-
+conn : the active connection 
+"""
 def save_db_changes(conn):
 	conn.commit()
 	conn.close()

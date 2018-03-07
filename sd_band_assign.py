@@ -93,6 +93,18 @@ else:
 	} 
 
 
+"""
+Calculate the Gender Distribution of a given Band.  
+
+gender : camper gender to get distribution of 
+temp_dict : the dictionary that represents a given Band 
+
+Returns 1 if the gender distribution is responable for a 
+camper of 'gender' to be inserted into the Band
+
+Returns 0 Otherwise 
+
+"""
 def get_gender_distribution(gender, temp_dict):
 
 	male_count = 0 
@@ -113,8 +125,14 @@ def get_gender_distribution(gender, temp_dict):
 		return 0 
 
 
+"""
+Assigns Band to a Camper
 
+id : Camper ID
+band_role : Camper's proposed band role 
+gender : Camper's Gender
 
+"""
 def assign_band(id, band_role, gender):
 
 	for key in band_assignments:

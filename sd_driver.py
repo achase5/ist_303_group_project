@@ -4,6 +4,11 @@ from sqlite_dbv3 import *
 import getpass 
 import os 
 
+
+"""
+Main Menu contents 
+
+"""
 def main():
 
 	print()
@@ -22,6 +27,12 @@ def main():
 	print()
 
 
+
+"""			
+Menu Option to 'Handle Applications', which means that the client could enter a 'New' 
+application and view the most recent status of any application 
+
+"""
 def handle_applications():
 
 	loop = 1
@@ -114,7 +125,7 @@ def handle_applications():
 			save_db_changes(conn)
 				
 """
-	make_decision(): Menu to allow client to make and mail application status notifications 
+	Menu Option to allow client to make and mail application status notifications 
 	to the campers. Also, the client updates the camper's application on whether the 
 	inital deposit payment has successfully processed. 
 
@@ -271,6 +282,11 @@ def make_decision():
 
 
 
+"""			
+Menu Option to 'Check-In' a given Camper. The client could enter Emergency Contact Info, Medical Info, 
+Legal Info, Search for the Camper given an 'ID' and Officially Check-In a given Camper
+
+"""
 
 def check_in_camper():
 
@@ -412,19 +428,19 @@ def check_in_camper():
 
 			if (r):
 				print("\n")
-				print(" - Camper ID : ", r[0])
+				print(" - Camper ID :  ", r[0])
 				print("\n")
-				print(" - Camper Proposed Camp Session Date : ", r[1])
-				if (r[2]): print(" - Has Camper Checked-In : Yes")
-				else: print(" - Has Camper Checked-In : No")
-				if (r[3]): print(" - Do we have Camper's application?  : Yes")
-				else: print(" - Do we have Camper's application : No")
-				if (r[4]): print(" - Do we have Camper's Emergency Contact Form?  : Yes")
-				else: print(" - Do we have Camper's Emergency Contact Form : No")
-				if (r[5]): print(" - Do we have Camper's Legal Form?  : Yes")
-				else: print(" - Do we have Camper's Legal Form : No")
-				if (r[6]): print(" - Do we have Camper's Medical Form?  : Yes")
-				else: print(" - Do we have Camper's Medical Form : No")
+				print(" - Camper Proposed Camp Session Date :  ", r[1])
+				if (r[2]): print(" - Has Camper Checked-In :  Yes")
+				else: print(" - Has Camper Checked-In :  No")
+				if (r[3]): print(" - Do we have Camper's application?  :  Yes")
+				else: print(" - Do we have Camper's application :  No")
+				if (r[4]): print(" - Do we have Camper's Emergency Contact Form?  :  Yes")
+				else: print(" - Do we have Camper's Emergency Contact Form :  No")
+				if (r[5]): print(" - Do we have Camper's Legal Form?  :  Yes")
+				else: print(" - Do we have Camper's Legal Form :  No")
+				if (r[6]): print(" - Do we have Camper's Medical Form?  :  Yes")
+				else: print(" - Do we have Camper's Medical Form :  No")
 
 
 
@@ -482,9 +498,10 @@ def check_in_camper():
 
 			save_db_changes(conn)
 
-			
 
-
+"""			
+Menu Option to Enter 'Maintenance Mode'
+"""
 def maintenance_mode():
 	pswd = getpass.getpass('Enter Password :')
 	if (pswd == "campers123"):
@@ -521,8 +538,9 @@ def maintenance_mode():
 
 
 
-
-
+"""
+Displays the Main Menu Options to the client 
+"""
 def display_menu():
 	loop = 1
 	while(loop):
@@ -542,5 +560,6 @@ def display_menu():
 
 		elif(user_in == 'x'):
 			maintenance_mode()
-			
+	
+
 display_menu()	
