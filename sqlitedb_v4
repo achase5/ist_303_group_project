@@ -1,0 +1,449 @@
+###########################
+####### CREATE TABLES #####
+###########################
+
+import sqlite3
+from sqlite3 import Error
+import os
+
+conn = sqlite3.connect('group_project.db')
+c = conn.cursor()
+
+
+def create_connection(group_project):
+    """ create a database connection to the SQLite database
+        specified by db_file
+    :param db_file: database file
+    :return: Connection object or None
+    """
+    try:
+        conn = sqlite3.connect(group_project)
+        return conn
+    except Error as e:
+        print(e)
+ 
+    return None
+
+def create_table(conn, create_table_sql):
+    """ create a table from the create_table_sql statement
+    :param conn: Connection object
+    :param create_table_sql: a CREATE TABLE statement
+    :return:
+    """
+    try:
+        c = conn.cursor()
+        c.execute(create_table_sql)
+    except Error as e:
+        print(e)
+
+
+def main():
+    database = "C:\\Users\\adam.chase\\Desktop\\school\\ist303\\group_project.db"
+ 
+    sql_create_application_table = """ CREATE TABLE IF NOT EXISTS  application (
+                                    camper_id integer PRIMARY KEY,
+                                    name_first text,
+                                    name_last text,
+                                    address text,
+                                    roomate_pref,
+                                    band_pref,
+                                    email text,
+                                    camp_dates text)
+                                    ; """
+ 
+    sql_create_emergency_contact_table = """CREATE TABLE IF NOT EXISTS emergency_contact (
+                                camper_id integer PRIMARY KEY,
+                                name_first text,
+                                name_last text,
+                                emergency_contact text)
+                                ;"""
+    
+    
+    sql_create_legal_table = """CREATE TABLE IF NOT EXISTS legal (
+                                        camper_id integer PRIMARY KEY,
+                                        name_first text,
+                                        name_last text,
+                                        age integer,
+                                        gender text,
+                                        parent text);"""
+                                        
+    
+    sql_create_medical_table = """CREATE TABLE IF NOT EXISTS medical (
+                                        camper_id integer PRIMARY KEY,
+                                        name_first text,
+                                        name_last text,
+                                        medical_insurance text,
+                                        doctor text,
+                                        dentist text,
+                                        allergies text,
+                                        medications text);"""
+
+    sql_create_notification_table = """CREATE TABLE IF NOT EXISTS notification (
+                                            camper_id integer PRIMARY KEY,
+                                            name_first text,
+                                            camp_dates text,
+                                            director_decision text,
+                                            director_comments text,
+                                            director_rank integer,
+                                            category text,
+                                            letter_type text,
+                                            notification_sent_date text);"""
+
+    sql_create_check_in_table = """--form's, equiptment, and clothes are boolean 1,0's indicating if camper brought it or not
+                                        CREATE TABLE IF NOT EXISTS check_in (
+                                        camper_id integer PRIMARY KEY,
+                                        check_in_date text,
+                                        application_form integer,
+                                        emergency_contact_form integer,
+                                        legal_form integer,
+                                        medical_form integer,
+                                        equiptment integer,
+                                        clothes integer)
+                                        ;"""  
+
+    sql_create_dorm_table = """CREATE TABLE IF NOT EXISTS dorm (
+                                    camper_id integer PRIMARY KEY,
+                                    camp_date text,
+                                    dorm_number integer,
+                                    category text,
+                                    gender text,
+                                    age integer);"""  
+
+    sql_create_band_table = """CREATE TABLE IF NOT EXISTS band(
+                                    camper_id integer PRIMARY KEY,
+                                    camp_date text,
+                                    band text,
+                                    category text,
+                                    gender text,
+                                    director_rank integer,
+                                    request text);"""  
+    
+    # create a database connection
+    conn = create_connection(database)
+    if conn is not None:
+        # create application table
+        create_table(conn, sql_create_application_table)
+        # create emergency contact table
+        create_table(conn, sql_create_emergency_contact_table)
+        # create legal table
+        create_table(conn, sql_create_legal_table)
+        # create medical table
+        create_table(conn, sql_create_medical_table)
+        # create notification table
+        create_table(conn, sql_create_notification_table)
+        # create check table
+        create_table(conn, sql_create_check_in_table)
+        # create dorm table
+        create_table(conn, sql_create_dorm_table)
+        # create band table
+        create_table(conn, sql_create_band_table)
+    else:
+        print("Error! cannot create the database connection.")
+
+if __name__ == '__main__':
+    main()
+
+
+#######################################
+######## INSERT INTO TABLES ###########
+#######################################
+
+## Create connection to DB
+def create_connection(group_project):
+    """ create a database connection to the SQLite database
+        specified by db_file
+    :param db_file: database file
+    :return: Connection object or None
+    """
+    try:
+        conn = sqlite3.connect(group_project)
+        return conn
+    except Error as e:
+        print(e)
+ 
+    return None
+
+
+##application table inserts
+def insert_application_table(conn, application):
+    """
+    Create a new application into the applications table
+    :param conn:
+    :param application:
+    :return: application id
+    """
+    sql = '''INSERT INTO application(camper_id, name_first, name_last, address, roomate_pref, band_pref, email, camp_dates)
+              VALUES(?,?,?,?,?,?,?,?)'''
+                    
+    cur = conn.cursor()
+    cur.execute(sql, application)
+    return cur.lastrowid
+
+
+def main():
+    database = "C:\\Users\\adam.chase\\Desktop\\school\\ist303\\group_project.db"
+ 
+    # create a database connection
+    conn = create_connection(database)
+    with conn:
+        # create a new application
+        application = ('456', 'Bob', 'Smith', '123 College Ave', 'Jill Smith', 'Jazz', 'bsmith@gmail.com', 'June week 2');
+        application_id = insert_application_table(conn, application)
+
+if __name__ == '__main__':
+    main()
+ 
+##to check rows in a given table
+c.execute("SELECT * FROM application")
+print(c.fetchall())
+
+##insert into emergency contact table
+
+def insert_emergency_contact_table(conn, emergency_contact):
+    """
+    Create a new application into the emergency_contact table
+    :param conn:
+    :param emergency_contact:
+    :return: application id
+    """
+    sql = '''INSERT INTO emergency_contact(camper_id, name_first, name_last, emergency_contact)
+              VALUES(?,?,?,?)'''
+
+                    
+    cur = conn.cursor()
+    cur.execute(sql, emergency_contact)
+    return cur.lastrowid
+
+
+def main():
+    database = "C:\\Users\\adam.chase\\Desktop\\school\\ist303\\group_project.db"
+ 
+    # create a database connection
+    conn = create_connection(database)
+    with conn:
+        # create a new application
+        emergency_contact = ('123','Sue','Smith','310-456-9999');
+        emergency_contact_id = insert_emergency_contact_table(conn, emergency_contact)
+
+if __name__ == '__main__':
+    main()
+
+c.execute("SELECT * FROM emergency_contact")
+print(c.fetchall())
+
+
+##insert into legal table
+
+def insert_legal_table(conn, legal):
+    """
+    Create a new application into the legal table
+    :param conn:
+    :param legal:
+    :return: camper id
+    """
+    sql = '''INSERT INTO legal(camper_id, name_first, name_last, age, gender, parent)
+              VALUES(?,?,?,?,?,?)'''
+
+                    
+    cur = conn.cursor()
+    cur.execute(sql, legal)
+    return cur.lastrowid
+
+
+def main():
+    database = "C:\\Users\\adam.chase\\Desktop\\school\\ist303\\group_project.db"
+ 
+    # create a database connection
+    conn = create_connection(database)
+    with conn:
+        # create a new application
+        legal = ('123','Sue','Smith','20','F','Sam Smith');
+        legal_id = insert_legal_table(conn, legal)
+
+if __name__ == '__main__':
+    main()
+
+
+##to check rows in a given table
+c.execute("SELECT * FROM legal")
+print(c.fetchall())
+
+##insert into medical table
+
+def insert_medical_table(conn, medical):
+    """
+    Create a new medical form into the medical table
+    :param conn:
+    :param medical:
+    :return: medical id
+    """
+    sql = '''INSERT INTO medical(camper_id, name_first, name_last, medical_insurance, doctor, dentist, allergies, medications)
+              VALUES(?,?,?,?,?,?,?,?)'''
+
+                    
+    cur = conn.cursor()
+    cur.execute(sql, medical)
+    return cur.lastrowid
+
+
+def main():
+    database = "C:\\Users\\adam.chase\\Desktop\\school\\ist303\\group_project.db"
+ 
+    # create a database connection
+    conn = create_connection(database)
+    with conn:
+        # create a new application
+        medical = ('123','Sue','Smith','Cigna','Dr. Oz','Dr. Tsitned','none','none');
+        medical_id = insert_medical_table(conn, medical)
+
+if __name__ == '__main__':
+    main()
+
+##to check rows in a given table
+c.execute("SELECT * FROM medical")
+print(c.fetchall())
+
+##insert into notification table
+
+def insert_notification_table(conn, notification):
+    """
+    Create a new notification form into the notification table
+    :param conn:
+    :param notification:
+    :return: notification
+    """
+    sql = '''INSERT INTO notification(camper_id, name_first, camp_dates, director_decision, director_comments, director_rank, category, letter_type, notification_sent_date)
+              VALUES(?,?,?,?,?,?,?,?,?)'''
+
+                    
+    cur = conn.cursor()
+    cur.execute(sql, notification)
+    return cur.lastrowid
+
+
+def main():
+    database = "C:\\Users\\adam.chase\\Desktop\\school\\ist303\\group_project.db"
+ 
+    # create a database connection
+    conn = create_connection(database)
+    with conn:
+        # create a new application
+        notification = ('123','Sue','June week 2','accepted','great work!','3','jazz','acceptance','4-26-2011'); 
+        notification_id = insert_notification_table(conn, notification)
+
+
+if __name__ == '__main__':
+    main()
+
+##to check rows in a given table
+c.execute("SELECT * FROM notification")
+print(c.fetchall())
+
+
+##insert into check in table
+
+def insert_check_in_table(conn, check_in):
+    """
+    Create a new check in form into the check_in table
+    :param conn:
+    :param notification:
+    :return: notification
+    """
+    sql = '''INSERT INTO check_in(camper_id, check_in_date, application_form, emergency_contact_form, legal_form, medical_form, equiptment, clothes)
+              VALUES(?,?,?,?,?,?,?,?)'''
+
+                    
+    cur = conn.cursor()
+    cur.execute(sql, check_in)
+    return cur.lastrowid
+
+
+def main():
+    database = "C:\\Users\\adam.chase\\Desktop\\school\\ist303\\group_project.db"
+ 
+    # create a database connection
+    conn = create_connection(database)
+    with conn:
+        # create a new application
+        check_in = ('123','6-10-2011','T','T','T','T','T','T'); 
+        check_in_id = insert_check_in_table(conn, check_in)
+
+if __name__ == '__main__':
+    main()
+
+##to check rows in a given table
+c.execute("SELECT * FROM check_in")
+print(c.fetchall())
+
+
+##insert into dorm in table
+
+def insert_dorm_table(conn, dorm):
+    """
+    Create a new dorm form into the dorm table
+    :param conn:
+    :param dorm:
+    :return: dorm
+    """
+    sql = '''INSERT INTO dorm(camper_id, camp_date, dorm_number, category, gender, age)
+              VALUES(?,?,?,?,?,?)'''
+
+                    
+    cur = conn.cursor()
+    cur.execute(sql, dorm)
+    return cur.lastrowid
+
+
+def main():
+    database = "C:\\Users\\adam.chase\\Desktop\\school\\ist303\\group_project.db"
+ 
+    # create a database connection
+    conn = create_connection(database)
+    with conn:
+        # create a new application
+        dorm = ('123','6-10-2011','4','Jazz','F','20'); 
+        dorm_id = insert_dorm_table(conn, dorm)
+
+if __name__ == '__main__':
+    main()
+
+##to check rows in a given table
+c.execute("SELECT * FROM dorm")
+print(c.fetchall())
+
+
+
+##insert into band table
+
+def insert_band_table(conn, band):
+    """
+    Create a new band form into the band table
+    :param conn:
+    :param band:
+    :return: band
+    """
+    sql = '''INSERT INTO band(camper_id, camp_date, band, category, gender, director_rank, request)
+              VALUES(?,?,?,?,?,?,?)'''
+
+                    
+    cur = conn.cursor()
+    cur.execute(sql, band)
+    return cur.lastrowid
+
+
+def main():
+    database = "C:\\Users\\adam.chase\\Desktop\\school\\ist303\\group_project.db"
+ 
+    # create a database connection
+    conn = create_connection(database)
+    with conn:
+        # create a new application
+        band = ('123','6-10-2011','MilesDavis','Jazz','F','3','move'); 
+        band_id = insert_band_table(conn, band)
+
+if __name__ == '__main__':
+    main()
+
+##to check rows in a given table
+c.execute("SELECT * FROM band")
+print(c.fetchall())
