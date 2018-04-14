@@ -51,8 +51,11 @@ else:
 
 
 
+"""
+Given a age (13-18), the approrpiate 'range' is calculated
 
-
+age : given 'age' value of a camper 
+"""
 def get_age_range(age):
 
 	if age == 17 or age == 18:
@@ -74,11 +77,9 @@ def get_age_range(age):
 
 Assign male Camper to appropriate dorm 
 
-Params:
 id: Camper ID
 age: Camper age
 a,b : Camper age range (e.g. if the camper is 16 yrs old, then the age range will be a=15, b=16)
-
 
 """
 def assign_male(id, age, a, b):
@@ -110,6 +111,16 @@ def assign_male(id, age, a, b):
 			return 1
 
 
+
+"""
+
+Assign female Camper to appropriate dorm 
+
+id : Camper ID
+age : Camper age
+a,b : Camper age range (e.g. if the camper is 16 yrs old, then the age range will be a=15, b=16)
+
+"""
 def assign_female(id, age, a, b):
 
 	for key in female_dorms:
@@ -130,14 +141,19 @@ def assign_female(id, age, a, b):
 
 
 """
-Assign Dorm Room given (Camper ID, Gender, Age)
+Assigns a Dorm room to a given Camper
+
+id : Camper ID
+gender : Camper's Gender
+age : Camper age
+
 """
 def assign_dorm(id, gender, age):
 
 	a,b = get_age_range(int(age))
 	#print("TEST: range: ", a, b)
 
-	if (gender == "male"):
+	if (gender == "male" or gender == "m" or gender == "Male" or gender == "M"):
 		assign_male(id, age, a, b)
 
 	else:
@@ -149,6 +165,11 @@ def assign_dorm(id, gender, age):
 
 Check if a Camper of an indicated ID, gender, and age could be inserted 
 into a specfic Dorm Name (dorm_name). 
+
+id : Camper ID
+gender : Camper's Gender
+age : Camper age
+dorm_name : dorm name 
 
 Returns 1 if it is ok to insert that Camper into the indicated Dorm
 Returns 0 if not
@@ -187,11 +208,6 @@ def dorm_insertion_check(id, gender, age, dorm_name):
 	else:
 
 		return 0 
-
-
-
-
-
 
 
 
