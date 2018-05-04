@@ -15,9 +15,7 @@ sql_create_application_table = """ CREATE TABLE IF NOT EXISTS  application (
                                     address text,
                                     gender text,
                                     age integer,
-                                    band_role text, 
-                                    roomate_pref integer,
-                                    band_pref text,
+                                    band_role text,
                                     email text,
                                     camp_dates text,
                                     status text,
@@ -68,14 +66,18 @@ sql_create_check_in_table = """CREATE TABLE IF NOT EXISTS check_in (
                                     legal_form integer,
                                     medical_form integer,
                                     equiptment integer,
-                                    clothes integer)
+                                    clothes integer,
+                                    rank text,
+                                    roommate_pref text,
+                                    roommate_avoid text,
+                                    band_member_pref text,
+                                    band_member_avoid text)
                                     ;"""  
 
 sql_create_dorm_table = """CREATE TABLE IF NOT EXISTS dorm (
                                 camper_id text PRIMARY KEY,
                                 camp_date text,
-                                dorm_number integer,
-                                category text,
+                                dorm_number text,
                                 gender text,
                                 age integer);"""  
 
@@ -83,10 +85,15 @@ sql_create_band_table = """CREATE TABLE IF NOT EXISTS band(
                                 camper_id text PRIMARY KEY,
                                 camp_date text,
                                 band text,
-                                category text,
                                 gender text,
-                                director_rank integer,
-                                request text);""" 
+                                director_rank integer);""" 
+
+sql_create_second_band_table = """CREATE TABLE IF NOT EXISTS second_band(
+                                camper_id text PRIMARY KEY,
+                                camp_date text,
+                                band text,
+                                gender text,
+                                director_rank integer);""" 
 
 
 
@@ -105,14 +112,15 @@ Create tables listed above
 c : the database cursor object 
 """
 def create_tables(c):
-	c.execute(sql_create_application_table)
-	c.execute(sql_create_emergency_contact_table)
-	c.execute(sql_create_legal_table)
-	c.execute(sql_create_medical_table)
-	c.execute(sql_create_notification_table)
-	c.execute(sql_create_check_in_table)
-	c.execute(sql_create_dorm_table)
-	c.execute(sql_create_band_table)
+    c.execute(sql_create_application_table)
+    c.execute(sql_create_emergency_contact_table)
+    c.execute(sql_create_legal_table)
+    c.execute(sql_create_medical_table)
+    c.execute(sql_create_notification_table)
+    c.execute(sql_create_check_in_table)
+    c.execute(sql_create_dorm_table)
+    c.execute(sql_create_band_table)
+    c.execute(sql_create_second_band_table)
 
 
 """
